@@ -1,0 +1,13 @@
+requests==2.32.3
+beautifulsoup4==4.12.3
+lxml==5.2.2
+numpy>=1.17
+peft>=0.8.0
+transformers>=4.57.0
+torch>=2.1.0
+accelerate>=0.24.0
+bitsandbytes>=0.43.0
+rouge-score
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+sentencepiece>=0.1.99
