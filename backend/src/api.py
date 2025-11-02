@@ -14,9 +14,15 @@ from agent_utils import initialize_model, generate_command
 app = FastAPI(title="Prompt2Shell API", version="1.0.0")
 
 # CORS middleware - allow frontend to connect
+import os
+ALLOWED_ORIGINS = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:8080,http://127.0.0.1:8080"
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080", "http://127.0.0.1:8080"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

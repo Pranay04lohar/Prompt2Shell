@@ -1,0 +1,15 @@
+# Production requirements (lighter version for deployment)
+# Remove training-only dependencies
+
+numpy>=1.17
+peft>=0.8.0
+transformers>=4.57.0
+torch>=2.1.0
+accelerate>=0.24.0
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+sentencepiece>=0.1.99
+
+# Optional: Only include bitsandbytes if GPU available
+# bitsandbytes>=0.43.0
+
