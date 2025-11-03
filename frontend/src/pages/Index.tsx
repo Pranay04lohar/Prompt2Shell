@@ -17,6 +17,7 @@ const Index = () => {
   const [modelName, setModelName] = useState(" Phi-3-mini (QLoRA Fine-Tuned)");
   const [apiStatus, setApiStatus] = useState<"connected" | "disconnected" | "loading">("loading");
   const [inputPrompt, setInputPrompt] = useState("");
+  const [hasMadeFirstRequest, setHasMadeFirstRequest] = useState(false);
 
   // Check API health on mount
   useEffect(() => {
@@ -38,6 +39,7 @@ const Index = () => {
       setSteps(response.steps);
       setModelName(response.model);
       saveToHistory(prompt);
+      if (!hasMadeFirstRequest) setHasMadeFirstRequest(true);
       
       if (apiStatus !== "connected") {
         setApiStatus("connected");
@@ -80,6 +82,12 @@ const Index = () => {
       <Header modelName={modelName} apiStatus={apiStatus} />
       
       <div className="flex-1 py-6">
+        {/* Cold start hint: only show before the first successful call */}
+        {!hasMadeFirstRequest && (apiStatus !== "connected" || isLoading) && (
+          <div className="mx-auto mb-4 w-full max-w-4xl rounded border border-border/40 bg-muted/20 px-4 py-2 text-xs text-muted-foreground">
+            Warming up the model — first request may take ~40–60s. Subsequent requests will be faster.
+          </div>
+        )}
         <PromptInput onSubmit={handleSubmit} isLoading={isLoading} initialValue={inputPrompt} />
         <CommandTerminal steps={steps} isLoading={isLoading} onPromptClick={handleSubmit} />
       </div>
