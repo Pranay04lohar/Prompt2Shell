@@ -15,18 +15,33 @@ app = FastAPI(title="Prompt2Shell API", version="1.0.0")
 
 # CORS middleware - allow frontend to connect
 import os
-ALLOWED_ORIGINS = os.getenv(
-    "ALLOWED_ORIGINS",
-    "http://localhost:8080,http://127.0.0.1:8080"
-).split(",")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+# CORS configuration: supports exact list, wildcard, or regex via env
+_origins_env = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:5173,http://127.0.0.1:5173,https://localhost:5173"
 )
+_origin_regex_env = os.getenv("ALLOWED_ORIGIN_REGEX", "")
+
+cors_kwargs = {
+    "allow_methods": ["*"],
+    "allow_headers": ["*"],
+}
+
+if _origin_regex_env:
+    cors_kwargs["allow_origin_regex"] = _origin_regex_env
+    cors_kwargs["allow_credentials"] = True
+else:
+    allowed = [o.strip() for o in _origins_env.split(",") if o.strip()]
+    if allowed == ["*"]:
+        # Wildcard only works with allow_credentials=False
+        cors_kwargs["allow_origins"] = ["*"]
+        cors_kwargs["allow_credentials"] = False
+    else:
+        cors_kwargs["allow_origins"] = allowed
+        cors_kwargs["allow_credentials"] = True
+
+app.add_middleware(CORSMiddleware, **cors_kwargs)
 
 # Request/Response models
 class GenerateRequest(BaseModel):
