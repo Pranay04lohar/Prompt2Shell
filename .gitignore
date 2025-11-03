@@ -1,0 +1,13 @@
+## Large local model artifacts
+*.gguf
+
+## Local source clones/tools
+/llama.cpp/
+/# Merged HF model artifacts
+/merged-phi3-prompt2shell/
+
+## Python build artifacts
+__pycache__/
+*.py[cod]
+
+
