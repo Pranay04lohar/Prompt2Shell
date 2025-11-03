@@ -13,7 +13,7 @@ const Footer = () => {
           </div>
           
           <a
-            href="https://github.com"
+            href="https://github.com/Pranay04lohar/Prompt2Shell"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 hover:terminal-text transition-colors"
