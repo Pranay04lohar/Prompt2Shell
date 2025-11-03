@@ -361,6 +361,23 @@ def generate_command(instruction, model=None, tokenizer=None, device=None,
     Returns:
         tuple: (command, plan) where command is the best extracted command and plan is the raw model response
     """
+    # If a remote model endpoint is configured, proxy the request instead of loading a local model
+    remote_url = os.getenv("MODEL_ENDPOINT_URL")
+    if remote_url:
+        try:
+            import requests
+            resp = requests.post(remote_url, json={"prompt": instruction}, timeout=120)
+            resp.raise_for_status()
+            data = resp.json()
+            cmd = data.get("response") or data.get("command") or ""
+            plan = cmd
+            if not cmd:
+                return "# No command returned", ""
+            return cmd, plan
+        except Exception as e:
+            # Fall through to local model as a backup if available
+            print(f"Remote MODEL_ENDPOINT_URL call failed: {e}. Falling back to local model if available.")
+
     # Initialize model if not provided
     if model is None or tokenizer is None:
         if lora_adapter_path is None:

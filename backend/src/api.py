@@ -46,7 +46,10 @@ class GenerateResponse(BaseModel):
 # Initialize model on startup
 @app.on_event("startup")
 async def startup_event():
-    """Load model when server starts"""
+    """Load model on startup unless proxying to external model."""
+    if os.getenv("MODEL_ENDPOINT_URL"):
+        print("MODEL_ENDPOINT_URL detected; skipping local model initialization.")
+        return
     print("Initializing model on server startup...")
     try:
         initialize_model()
