@@ -9,6 +9,9 @@ AI-powered shell command generator that transforms natural language prompts into
 
 ## Demo Video:
 
+https://github.com/user-attachments/assets/0d429dca-328c-4344-b0f1-28dd877ad243
+
+
 
 
 ## Features
